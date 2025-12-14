@@ -70,5 +70,20 @@
         }
     });
     
+    $(document).on('click', 'a.nav-link[href^="#"]', function (e) {
+        var target = this.getAttribute('href');
+        if (target && target.length > 1) {
+            var $t = $(target);
+            if ($t.length) {
+                e.preventDefault();
+                $('html, body').animate({ scrollTop: $t.offset().top }, 800, 'easeInOutExpo');
+                var $collapse = $('.navbar-collapse.show');
+                if ($collapse.length) {
+                    $collapse.collapse('hide');
+                }
+            }
+        }
+    });
+    
 })(jQuery);
 

@@ -111,9 +111,9 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto p-4">
-                    <a href="index.html" class="nav-item nav-link active">Beranda</a>
-                    <a href="about.html" class="nav-item nav-link">Tentang Kami</a>
-                    <a href="menu.html" class="nav-item nav-link">Produk</a>
+                    <a href="{{ url('/') }}" class="nav-item nav-link active">Beranda</a>
+                    <a href="#tentang" class="nav-item nav-link">Tentang Kami</a>
+                    <a href="{{ route('produk.index') }}" class="nav-item nav-link">Produk</a>
                     {{-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu text-capitalize">
@@ -121,7 +121,7 @@
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                         </div>
                     </div> --}}
-                    <a href="contact.html" class="nav-item nav-link">Kontak</a>
+                    <a href="#footer" class="nav-item nav-link">Kontak</a>
                 </div>
             </div>
         </nav>
@@ -169,7 +169,7 @@
 
 
     <!-- About Start -->
-    <div class="container-fluid py-5">
+    <div id="tentang" class="container-fluid py-5">
         <div class="container">
             <div class="section-title">
                 <h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Tentang Kami</h4>
@@ -735,7 +735,7 @@
 
 
     <!-- Footer Start -->
-    <div class="container-fluid footer text-white mt-5 pt-5 px-0 position-relative overlay-top">
+    <div id="footer" class="container-fluid footer text-white mt-5 pt-5 px-0 position-relative overlay-top">
         <div class="row mx-0 pt-5 px-sm-3 px-lg-5 mt-4">
             <div class="col-lg-3 col-md-6 mb-5">
                 <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Hubungi Kami</h4>
