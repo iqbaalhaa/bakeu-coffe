@@ -19,7 +19,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
-                            Sign Out
+                            Keluar
                         </button>
                     </form>
                 </div>
@@ -41,7 +41,7 @@
             <li class="nav-item mb-3">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link d-flex align-items-center">
                     <span class="sidebar-icon">
-                        <img src="{{ asset('backend/assets/img/brand/light.svg') }}" height="20" width="20" alt="Logo">
+                        <img src="{{ asset('backend/assets/img/logo.png') }}" height="30" width="100%" alt="Logo">
                     </span>
                     <span class="mt-1 ms-1 sidebar-text">Bakeu Coffee Admin</span>
                 </a>

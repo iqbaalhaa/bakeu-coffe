@@ -250,7 +250,9 @@
         <div class="mb-3">
             <strong>Misi:</strong>
             <div class="mt-1">
-                @php($misiList = !empty($profil->misi) ? preg_split('/\r?\n/', $profil->misi) : [])
+                @php
+                    $misiList = !empty($profil->misi) ? preg_split('/\r?\n/', $profil->misi) : [];
+                @endphp
                 @if(!empty($misiList))
                     <ul class="mb-0">
                         @foreach($misiList as $m)
