@@ -8,16 +8,28 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('highlights', function (Blueprint $table) {
-            $table->string('kategori')->nullable()->after('deskripsi');
-            $table->string('warna_tema')->nullable()->after('ikon_css');
+            if (!Schema::hasColumn('highlights', 'kategori')) {
+                $table->string('kategori')->nullable()->after('deskripsi');
+            }
+            if (!Schema::hasColumn('highlights', 'warna_tema')) {
+                $table->string('warna_tema')->nullable()->after('ikon_css');
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('highlights', function (Blueprint $table) {
-            $table->dropColumn(['kategori', 'warna_tema']);
+            $columnsToDrop = [];
+            if (Schema::hasColumn('highlights', 'kategori')) {
+                $columnsToDrop[] = 'kategori';
+            }
+            if (Schema::hasColumn('highlights', 'warna_tema')) {
+                $columnsToDrop[] = 'warna_tema';
+            }
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
         });
     }
 };
-

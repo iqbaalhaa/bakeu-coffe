@@ -22,6 +22,22 @@
         @error('pesan_testimoni') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
+    @if(isset($daftarProduk) && $daftarProduk->count())
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Terkait Produk</label>
+            <select name="produk_id" class="form-select @error('produk_id') is-invalid @enderror">
+                <option value="">Umum (tidak terkait produk tertentu)</option>
+                @foreach($daftarProduk as $p)
+                    <option value="{{ $p->id }}" {{ (int)old('produk_id', $testimoni->produk_id) === $p->id ? 'selected' : '' }}>
+                        {{ $p->nama_produk }}
+                    </option>
+                @endforeach
+            </select>
+            @error('produk_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            <small class="text-muted">Pilih produk yang mendapat testimoni ini.</small>
+        </div>
+    @endif
+
     <div class="col-md-4 mb-3">
         <label class="form-label">Rating (1–5)</label>
         <select name="rating" class="form-select">

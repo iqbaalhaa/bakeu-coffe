@@ -102,7 +102,7 @@
     <!-- Navbar Start -->
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
-            <a href="/" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
+            <a href="{{ url('/') }}" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
                 <img src="{{ isset($profil) && $profil->path_logo ? asset('storage/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
                 <h1 class="m-0 display-6 text-uppercase text-white">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
             </a>
@@ -111,17 +111,11 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto p-4">
-                    <a href="{{ url('/') }}" class="nav-item nav-link active">Beranda</a>
-                    <a href="#tentang" class="nav-item nav-link">Tentang Kami</a>
-                    <a href="{{ route('produk.index') }}" class="nav-item nav-link">Produk</a>
-                    {{-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu text-capitalize">
-                            <a href="reservation.html" class="dropdown-item">Reservation</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        </div>
-                    </div> --}}
-                    <a href="#footer" class="nav-item nav-link">Kontak</a>
+                    <a href="{{ url('/') }}" class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Beranda</a>
+                    <a href="{{ route('produk.index') }}" class="nav-item nav-link {{ request()->routeIs('produk.*') ? 'active' : '' }}">Produk</a>
+                    <a href="{{ route('galeri.index') }}" class="nav-item nav-link {{ request()->routeIs('galeri.index') ? 'active' : '' }}">Galeri</a>
+                    <a href="{{ url('/#footer') }}" class="nav-item nav-link">Kontak</a>
+                    <a href="{{ url('/#tentang') }}" class="nav-item nav-link">Tentang Kami</a>
                 </div>
             </div>
         </nav>
@@ -139,7 +133,7 @@
                         <h1 class="display-4 text-white m-0">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
                         <h2 class="text-white m-0">{{ $profil->subjudul_hero ?? 'Freshly Roasted · Premium Beans · Crafted with Passion' }}</h2>
                         <div class="mt-4 d-flex">
-                            <a href="{{ $profil->tautan_tombol_lihat_produk ?? 'menu.html' }}" class="btn btn-primary btn-lg px-4">{{ $profil->teks_tombol_lihat_produk ?? 'Lihat Produk' }}</a>
+                            <a href="{{ route('produk.index') }}" class="btn btn-primary btn-lg px-4">{{ $profil->teks_tombol_lihat_produk ?? 'Lihat Produk' }}</a>
                             <a href="{{ isset($profil->no_whatsapp) ? 'https://wa.me/'.preg_replace('/\D/', '', $profil->no_whatsapp) : 'https://wa.me/6281234567890' }}" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg px-4 ml-3">{{ $profil->teks_tombol_whatsapp ?? 'Pesan via WhatsApp' }}</a>
                         </div>
                     </div>
@@ -151,7 +145,7 @@
                         <h1 class="display-3 text-white m-0">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
                         <h2 class="text-white m-0">{{ $profil->subjudul_hero ?? 'Freshly Roasted · Premium Beans · Crafted with Passion' }}</h2>
                         <div class="mt-4 d-flex">
-                            <a href="{{ $profil->tautan_tombol_lihat_produk ?? 'menu.html' }}" class="btn btn-primary btn-lg px-4">{{ $profil->teks_tombol_lihat_produk ?? 'Lihat Produk' }}</a>
+                            <a href="{{ route('produk.index') }}" class="btn btn-primary btn-lg px-4">{{ $profil->teks_tombol_lihat_produk ?? 'Lihat Produk' }}</a>
                             <a href="{{ isset($profil->no_whatsapp) ? 'https://wa.me/'.preg_replace('/\D/', '', $profil->no_whatsapp) : 'https://wa.me/6281234567890' }}" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg px-4 ml-3">{{ $profil->teks_tombol_whatsapp ?? 'Pesan via WhatsApp' }}</a>
                         </div>
                     </div>
@@ -291,276 +285,7 @@
         </div>
       </div>
     </section>
-
-
-    <!-- Produk Start -->
-    <div class="container-fluid pt-5" id="produk">
-        <div class="container">
-            <div class="section-title text-center mb-5">
-                <h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Produk & Harga</h4>
-                <h1 class="display-4 fw-bold">Harga Kompetitif</h1>
-                <p class="text-muted mt-3">
-                    Nikmati racikan kopi lokal terbaik dari Bakeu Coffee dengan harga yang tetap ramah di kantong.
-                </p>
-            </div>
-
-            <div class="row g-4">
-                @forelse($produk as $p)
-                    @php
-                        $img = !empty($p->path_gambar)
-                            ? asset('storage/'.$p->path_gambar)
-                            : asset('frontend/img/menu-1.jpg');
-
-                        $waNumber = optional($profil ?? null)->no_whatsapp;
-                        $waUrl = $waNumber
-                            ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $waNumber) . '?text=' . urlencode('Halo, saya ingin pesan '.$p->nama_produk)
-                            : '#';
-                    @endphp
-
-                    <div class="col-6 col-md-4 col-lg-3 mb-4">
-                        <div class="card product-card h-100 border-0 shadow-sm">
-                            <div class="position-relative overflow-hidden">
-                                <img src="{{ $img }}"
-                                    alt="{{ $p->nama_produk }}"
-                                    class="card-img-top product-image">
-
-                                {{-- Ribbon Favorit --}}
-                                @if($p->ditandai_favorit)
-                                    <div class="product-ribbon">
-                                        Favorit
-                                    </div>
-                                @endif
-
-                                {{-- Badge Kategori --}}
-                                @if($p->kategori)
-                                    <span class="badge bg-dark text-white product-badge">
-                                        {{ strtoupper($p->kategori) === 'HOT' ? 'Hot Coffee' : (strtoupper($p->kategori) === 'COLD' ? 'Cold Coffee' : ucfirst($p->kategori)) }}
-                                    </span>
-                                @endif
-                            </div>
-
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-1 text-truncate">{{ $p->nama_produk }}</h5>
-                                <p class="card-text text-muted small mb-3">
-                                    {{ \Illuminate\Support\Str::limit($p->deskripsi_singkat, 80) }}
-                                </p>
-
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <div>
-                                            <div class="text-muted small">Harga</div>
-                                            <div class="h5 mb-0 text-primary fw-bold">
-                                                Rp {{ number_format($p->harga, 0, ',', '.') }}
-                                            </div>
-                                        </div>
-                                        {{-- Rating dummy (kalau mau gaya e-commerce) --}}
-                                        <div class="text-warning small">
-                                            ★★★★☆
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex gap-2">
-                                        <div class="d-flex justify-content-center w-100">
-                                            <a href="{{ route('produk.show', ['produk' => $p->id, 'slug' => \Illuminate\Support\Str::slug($p->nama_produk)]) }}" class="btn btn-secondary rounded-pill px-4">Lihat Produk</a>
-                                        </div>
-                                        {{-- Tombol lihat detail kalau nanti mau pakai halaman produk --}}
-                                        {{-- <a href="{{ route('produk.detail', $p->id) }}" class="btn btn-sm btn-outline-secondary">
-                                            <i class="fa fa-eye"></i>
-                                        </a> --}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    @php
-                        $placeholderProduk = [
-                            [
-                                'nama_produk' => 'Kopi Arabika Kerinci',
-                                'harga' => 25000,
-                                'kategori' => 'HOT',
-                                'deskripsi_singkat' => 'Kopi pilihan dari dataran tinggi Kerinci dengan aroma khas.',
-                                'img' => asset('frontend/img/menu-1.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Kopi Susu Kekinian',
-                                'harga' => 22000,
-                                'kategori' => 'COLD',
-                                'deskripsi_singkat' => 'Racikan kopi susu dalam kemasan praktis siap minum.',
-                                'img' => asset('frontend/img/menu-2.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Espresso Single Shot',
-                                'harga' => 18000,
-                                'kategori' => 'HOT',
-                                'deskripsi_singkat' => 'Espresso pekat untuk energi instan.',
-                                'img' => asset('frontend/img/menu-3.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Americano Dingin',
-                                'harga' => 20000,
-                                'kategori' => 'COLD',
-                                'deskripsi_singkat' => 'Americano segar dengan es batu.',
-                                'img' => asset('frontend/img/menu-4.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Latte Art',
-                                'harga' => 28000,
-                                'kategori' => 'HOT',
-                                'deskripsi_singkat' => 'Latte creamy dengan seni latte art.',
-                                'img' => asset('frontend/img/menu-5.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Snack Pendamping Kopi',
-                                'harga' => 15000,
-                                'kategori' => 'Snack',
-                                'deskripsi_singkat' => 'Aneka kue kering rumahan sebagai teman ngopi.',
-                                'img' => asset('frontend/img/menu-6.jpg'),
-                            ],
-                        ];
-                    @endphp
-                    @foreach($placeholderProduk as $item)
-                        <div class="col-6 col-md-4 col-lg-3 mb-4">
-                            <div class="card product-card h-100 border-0 shadow-sm">
-                                <div class="position-relative overflow-hidden">
-                                    <img src="{{ $item['img'] }}"
-                                        alt="{{ $item['nama_produk'] }}"
-                                        class="card-img-top product-image">
-
-                                    @if(!empty($item['kategori']))
-                                        <span class="badge bg-dark text-white product-badge">
-                                            {{ strtoupper($item['kategori']) === 'HOT' ? 'Hot Coffee' : (strtoupper($item['kategori']) === 'COLD' ? 'Cold Coffee' : ucfirst($item['kategori'])) }}
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-1 text-truncate">{{ $item['nama_produk'] }}</h5>
-                                    <p class="card-text text-muted small mb-3">
-                                        {{ \Illuminate\Support\Str::limit($item['deskripsi_singkat'], 80) }}
-                                    </p>
-
-                                    <div class="mt-auto">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <div class="text-muted small">Harga</div>
-                                                <div class="h5 mb-0 text-primary fw-bold">
-                                                    Rp {{ number_format($item['harga'], 0, ',', '.') }}
-                                                </div>
-                                            </div>
-                                            <div class="text-warning small">★★★★☆</div>
-                                        </div>
-
-                                        <div class="d-flex gap-2">
-                                            <div class="d-flex justify-content-center w-100">
-                                                <a href="{{ route('produk.index') }}" class="btn btn-secondary rounded-pill px-4">Lihat Produk</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @endforelse
-                @php
-                    $missing = isset($produk) ? max(0, 8 - $produk->count()) : 8;
-                @endphp
-                @if($missing > 0)
-                    @php
-                        $placeholderProduk = [
-                            [
-                                'nama_produk' => 'Kopi Arabika Kerinci',
-                                'harga' => 25000,
-                                'kategori' => 'HOT',
-                                'deskripsi_singkat' => 'Kopi pilihan dari dataran tinggi Kerinci dengan aroma khas.',
-                                'img' => asset('frontend/img/menu-1.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Kopi Susu Kekinian',
-                                'harga' => 22000,
-                                'kategori' => 'COLD',
-                                'deskripsi_singkat' => 'Racikan kopi susu dalam kemasan praktis siap minum.',
-                                'img' => asset('frontend/img/menu-2.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Espresso Single Shot',
-                                'harga' => 18000,
-                                'kategori' => 'HOT',
-                                'deskripsi_singkat' => 'Espresso pekat untuk energi instan.',
-                                'img' => asset('frontend/img/menu-3.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Americano Dingin',
-                                'harga' => 20000,
-                                'kategori' => 'COLD',
-                                'deskripsi_singkat' => 'Americano segar dengan es batu.',
-                                'img' => asset('frontend/img/menu-4.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Latte Art',
-                                'harga' => 28000,
-                                'kategori' => 'HOT',
-                                'deskripsi_singkat' => 'Latte creamy dengan seni latte art.',
-                                'img' => asset('frontend/img/menu-5.jpg'),
-                            ],
-                            [
-                                'nama_produk' => 'Snack Pendamping Kopi',
-                                'harga' => 15000,
-                                'kategori' => 'Snack',
-                                'deskripsi_singkat' => 'Aneka kue kering rumahan sebagai teman ngopi.',
-                                'img' => asset('frontend/img/menu-6.jpg'),
-                            ],
-                        ];
-                    @endphp
-                    @for($i = 0; $i < $missing; $i++)
-                        @php
-                            $item = $placeholderProduk[$i % count($placeholderProduk)];
-                        @endphp
-                        <div class="col-6 col-md-4 col-lg-3 mb-4">
-                            <div class="card product-card h-100 border-0 shadow-sm">
-                                <div class="position-relative overflow-hidden">
-                                    <img src="{{ $item['img'] }}"
-                                         alt="{{ $item['nama_produk'] }}"
-                                         class="card-img-top product-image">
-                                    @if(!empty($item['kategori']))
-                                        <span class="badge bg-dark text-white product-badge">
-                                            {{ strtoupper($item['kategori']) === 'HOT' ? 'Hot Coffee' : (strtoupper($item['kategori']) === 'COLD' ? 'Cold Coffee' : ucfirst($item['kategori'])) }}
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-1 text-truncate">{{ $item['nama_produk'] }}</h5>
-                                    <p class="card-text text-muted small mb-3">{{ \Illuminate\Support\Str::limit($item['deskripsi_singkat'], 80) }}</p>
-                                    <div class="mt-auto">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <div class="text-muted small">Harga</div>
-                                                <div class="h5 mb-0 text-primary fw-bold">Rp {{ number_format($item['harga'], 0, ',', '.') }}</div>
-                                            </div>
-                                            <div class="text-warning small">★★★★☆</div>
-                                        </div>
-                                        <div class="d-flex gap-2">
-                                            <div class="d-flex justify-content-center w-100">
-                                                <a href="{{ route('produk.index') }}" class="btn btn-secondary rounded-pill px-4">Lihat Produk</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endfor
-                @endif
-                <div class="col-12 text-center mt-3">
-                    <a href="{{ route('produk.index') }}" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">
-                        Lihat semua produk
-                    </a>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    <!-- Produk End -->
-
+    
     <!-- Contact Start (styled like overlay section) -->
     <div class="container-fluid my-5" id="kontak">
       <div class="container">
@@ -682,57 +407,6 @@
         </div>
       </div>
     </div>
-
-
-    <!-- Testimonial Start -->
-    <div class="container-fluid py-5">
-        <div class="container">
-            <div class="section-title">
-                <h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Testimoni</h4>
-                <h1 class="display-4">Testimoni Pelanggan</h1>
-            </div>
-            <div class="owl-carousel testimonial-carousel">
-                @forelse(($testimoni ?? collect()) as $t)
-                    @php
-                        $foto = !empty($t->path_foto)
-                            ? asset('storage/'.$t->path_foto)
-                            : asset('frontend/img/testimonial-1.jpg');
-                        $rating = (int)($t->rating ?? 5);
-                    @endphp
-                    <div class="testimonial-item">
-                        <div class="d-flex align-items-center mb-3">
-                            <img class="img-fluid rounded" src="{{ $foto }}" alt="{{ $t->nama_klien }}" style="width:56px;height:56px;object-fit:cover;">
-                            <div class="ml-3 text-left">
-                                <h4 class="mb-1">{{ $t->nama_klien }}</h4>
-                                <i class="text-muted">{{ $t->profesi ?: 'Pelanggan' }}</i>
-                                <div class="text-warning small mt-1">
-                                    @for($i=1;$i<=5;$i++)
-                                        {!! $i <= $rating ? '&#9733;' : '&#9734;' !!}
-                                    @endfor
-                                </div>
-                            </div>
-                        </div>
-                        @if(!empty($t->pesan_testimoni))
-                            <p class="m-0">{{ $t->pesan_testimoni }}</p>
-                        @endif
-                    </div>
-                @empty
-                    <div class="testimonial-item">
-                        <div class="d-flex align-items-center mb-3">
-                            <img class="img-fluid rounded" src="{{ asset('frontend/img/testimonial-1.jpg') }}" alt="">
-                            <div class="ml-3 text-left">
-                                <h4 class="mb-1">Client Name</h4>
-                                <i class="text-muted">Profession</i>
-                            </div>
-                        </div>
-                        <p class="m-0">Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem.</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-    </div>
-    <!-- Testimonial End -->
-
 
     <!-- Footer Start -->
     <div id="footer" class="container-fluid footer text-white mt-5 pt-5 px-0 position-relative overlay-top">

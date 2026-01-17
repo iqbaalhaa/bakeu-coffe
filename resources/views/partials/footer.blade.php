@@ -5,10 +5,5 @@
                 © 2025 Bakeu Coffee Admin
             </p>
         </div>
-        <div class="col-12 col-md-6 text-center text-md-end">
-            <span class="text-muted small">
-                Built with Volt Bootstrap Dashboard
-            </span>
-        </div>
     </div>
 </footer>

@@ -37,7 +37,7 @@
     <!-- Navbar Start -->
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3 navbar-coffee">
-            <a href="/" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
+            <a href="{{ url('/') }}" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
                 <img src="{{ isset($profil) && $profil->path_logo ? asset('storage/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
                 <h1 class="m-0 display-6 text-uppercase text-white">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
             </a>
@@ -46,17 +46,11 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto p-4">
-                    <a href="index.html" class="nav-item nav-link active">Beranda</a>
-                    <a href="about.html" class="nav-item nav-link">Tentang Kami</a>
-                    <a href="menu.html" class="nav-item nav-link">Produk</a>
-                    {{-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu text-capitalize">
-                            <a href="reservation.html" class="dropdown-item">Reservation</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        </div>
-                    </div> --}}
-                    <a href="contact.html" class="nav-item nav-link">Kontak</a>
+                    <a href="{{ url('/') }}" class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Beranda</a>
+                    <a href="{{ url('/#tentang') }}" class="nav-item nav-link">Tentang Kami</a>
+                    <a href="{{ route('produk.index') }}" class="nav-item nav-link {{ request()->routeIs('produk.*') ? 'active' : '' }}">Produk</a>
+                    <a href="{{ route('galeri.index') }}" class="nav-item nav-link {{ request()->routeIs('galeri.index') ? 'active' : '' }}">Galeri</a>
+                    <a href="{{ url('/#footer') }}" class="nav-item nav-link">Kontak</a>
                 </div>
             </div>
         </nav>
@@ -152,17 +146,41 @@
                                 </p>
 
                                 <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                    @php
+                                        $jumlahTestimoni = $p->testimoni->count();
+                                        $avgRating = $p->testimoni->whereNotNull('rating')->avg('rating');
+                                        $roundedRating = $avgRating ? round($avgRating) : 0;
+                                        $avgRatingDisplay = $avgRating ? number_format($avgRating, 1, ',', '.') : null;
+                                    @endphp
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div>
                                             <div class="text-muted small">Harga</div>
                                             <div class="h5 mb-0 text-primary font-weight-bold">
                                                 Rp {{ number_format($p->harga, 0, ',', '.') }}
                                             </div>
                                         </div>
-                                        {{-- Rating dummy --}}
-                                        <div class="text-warning small">
-                                            ★★★★☆
+                                        <div class="small">
+                                            @if($roundedRating > 0 && $avgRatingDisplay)
+                                                <span class="text-warning">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        {!! $i <= $roundedRating ? '&#9733;' : '&#9734;' !!}
+                                                    @endfor
+                                                </span>
+                                                <span class="text-muted ml-1">
+                                                    {{ $avgRatingDisplay }}/5
+                                                </span>
+                                            @else
+                                                <span class="text-muted">Belum ada rating</span>
+                                            @endif
                                         </div>
+                                    </div>
+
+                                    <div class="text-muted small mb-2">
+                                        @if($jumlahTestimoni > 0)
+                                            {{ $jumlahTestimoni }} testimoni
+                                        @else
+                                            Belum ada testimoni
+                                        @endif
                                     </div>
 
                                     <div class="d-flex flex-column">

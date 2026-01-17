@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimoni;
+use App\Models\Produk;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -15,7 +16,8 @@ class TestimoniController extends Controller
      */
     public function index()
     {
-        $daftarTestimoni = Testimoni::orderBy('urutan_tampil')
+        $daftarTestimoni = Testimoni::with('produk')
+            ->orderBy('urutan_tampil')
             ->orderByDesc('created_at')
             ->get();
 
@@ -28,8 +30,11 @@ class TestimoniController extends Controller
     public function create()
     {
         $testimoni = new Testimoni();
+        $daftarProduk = Produk::where('status_aktif', true)
+            ->orderBy('nama_produk')
+            ->get();
 
-        return view('admin.testimoni.create', compact('testimoni'));
+        return view('admin.testimoni.create', compact('testimoni', 'daftarProduk'));
     }
 
     /**
@@ -38,6 +43,7 @@ class TestimoniController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'produk_id'       => 'nullable|exists:produk,id',
             'nama_klien'      => 'required|string|max:255',
             'profesi'         => 'nullable|string|max:255',
             'pesan_testimoni' => 'required|string',
@@ -70,7 +76,11 @@ class TestimoniController extends Controller
      */
     public function edit(Testimoni $testimoni)
     {
-        return view('admin.testimoni.edit', compact('testimoni'));
+        $daftarProduk = Produk::where('status_aktif', true)
+            ->orderBy('nama_produk')
+            ->get();
+
+        return view('admin.testimoni.edit', compact('testimoni', 'daftarProduk'));
     }
 
     /**
@@ -79,6 +89,7 @@ class TestimoniController extends Controller
     public function update(Request $request, Testimoni $testimoni)
     {
         $data = $request->validate([
+            'produk_id'       => 'nullable|exists:produk,id',
             'nama_klien'      => 'required|string|max:255',
             'profesi'         => 'nullable|string|max:255',
             'pesan_testimoni' => 'required|string',
@@ -123,7 +134,16 @@ class TestimoniController extends Controller
             ->with('success', 'Testimoni berhasil dihapus.');
     }
 
-    // show tidak diperlukan
+    public function toggleStatus(Testimoni $testimoni)
+    {
+        $testimoni->status_aktif = ! $testimoni->status_aktif;
+        $testimoni->save();
+
+        return redirect()
+            ->route('admin.testimoni.index')
+            ->with('success', $testimoni->status_aktif ? 'Testimoni diaktifkan.' : 'Testimoni dinonaktifkan.');
+    }
+
     public function show(Testimoni $testimoni)
     {
         abort(404);

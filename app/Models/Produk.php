@@ -25,4 +25,9 @@ class Produk extends Model
         'ditandai_favorit' => 'boolean',
         'harga'            => 'float',
     ];
+
+    public function testimoni()
+    {
+        return $this->hasMany(Testimoni::class, 'produk_id');
+    }
 }

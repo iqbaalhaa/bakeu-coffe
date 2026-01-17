@@ -9,6 +9,7 @@ class Testimoni extends Model
     protected $table = 'testimoni';
 
     protected $fillable = [
+        'produk_id',
         'nama_klien',
         'profesi',
         'pesan_testimoni',
@@ -22,4 +23,9 @@ class Testimoni extends Model
         'status_aktif' => 'boolean',
         'rating'       => 'integer',
     ];
+
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id');
+    }
 }

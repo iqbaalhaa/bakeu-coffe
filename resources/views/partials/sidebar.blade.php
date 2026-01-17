@@ -78,6 +78,15 @@
                 </a>
             </li>
 
+            <li class="nav-item {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.galeri.index') }}" class="nav-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
+                    <span class="sidebar-icon">
+                        <i class="bi bi-images"></i>
+                    </span>
+                    <span class="sidebar-text">Galeri</span>
+                </a>
+            </li>
+
             <li class="nav-item {{ request()->routeIs('admin.media-sosial.*') ? 'active' : '' }}">
                 <a href="{{ route('admin.media-sosial.index') }}" class="nav-link {{ request()->routeIs('admin.media-sosial.*') ? 'active' : '' }}">
                     <span class="sidebar-icon">
