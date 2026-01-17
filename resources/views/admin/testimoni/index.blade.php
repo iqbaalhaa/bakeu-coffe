@@ -48,7 +48,7 @@
                                     </td>
                                     <td>
                                         @if($t->produk)
-                                            <span class="badge bg-light text-dark border">
+                                            <span class="badge bg-secondary text-white">
                                                 {{ $t->produk->nama_produk }}
                                             </span>
                                         @else
@@ -85,7 +85,7 @@
                                             @csrf
                                             <button type="submit"
                                                     class="btn btn-sm {{ $t->status_aktif ? 'btn-outline-secondary' : 'btn-outline-success' }}">
-                                                {{ $t->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}
+                                                {{ $t->status_aktif ? 'Off' : 'On' }}
                                             </button>
                                         </form>
                                         <a href="{{ route('admin.testimoni.edit', $t) }}"
@@ -99,7 +99,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                Hapus
+                                                Del
                                             </button>
                                         </form>
                                     </td>

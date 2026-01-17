@@ -47,10 +47,10 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto p-4">
                     <a href="{{ url('/') }}" class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Beranda</a>
-                    <a href="{{ url('/#tentang') }}" class="nav-item nav-link">Tentang Kami</a>
                     <a href="{{ route('produk.index') }}" class="nav-item nav-link {{ request()->routeIs('produk.*') ? 'active' : '' }}">Produk</a>
                     <a href="{{ route('galeri.index') }}" class="nav-item nav-link {{ request()->routeIs('galeri.index') ? 'active' : '' }}">Galeri</a>
                     <a href="{{ url('/#footer') }}" class="nav-item nav-link">Kontak</a>
+                    <a href="{{ url('/#tentang') }}" class="nav-item nav-link">Tentang Kami</a>
                 </div>
             </div>
         </nav>
