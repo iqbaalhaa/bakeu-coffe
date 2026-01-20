@@ -80,6 +80,23 @@
             padding: 0.45rem 1.6rem;
             font-weight: 500;
         }
+        .custom-file-label {
+            border-radius: 999px;
+            border-color: rgba(30, 22, 17, 0.12);
+            padding-left: 20px;
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+        .custom-file-label::after {
+            border-radius: 0 999px 999px 0;
+            background-color: #f8f5f2;
+            color: #8a7a6d;
+            border-left: 1px solid rgba(30, 22, 17, 0.12);
+        }
+        .custom-file-input:focus ~ .custom-file-label {
+            border-color: #b37a4c;
+            box-shadow: 0 0 0 0.12rem rgba(179, 122, 76, 0.25);
+        }
     </style>
 </head>
 
@@ -198,7 +215,7 @@
                         @endif
                     </div>
                     <div class="testimonial-form-wrapper">
-                        <form action="{{ route('produk.testimoni.store', $produk) }}" method="POST" class="testimonial-form">
+                        <form action="{{ route('produk.testimoni.store', $produk) }}" method="POST" class="testimonial-form" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="produk_id" value="{{ $produk->id }}">
                             <div class="form-group mb-2">
@@ -208,6 +225,13 @@
                             <div class="form-group mb-2">
                                 <div class="testimonial-form-label">Profesi</div>
                                 <input type="text" name="profesi" class="form-control form-control-sm" placeholder="Profesi atau aktivitas sehari-hari" >
+                            </div>
+                            <div class="form-group mb-2">
+                                <div class="testimonial-form-label">Foto (Opsional)</div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="path_foto" name="path_foto" accept="image/jpeg,image/png,image/webp" max="4096">
+                                    <label class="custom-file-label text-muted" for="path_foto" data-browse="Telusuri">Pilih foto...</label>
+                                </div>
                             </div>
                             <div class="form-group mb-2">
                                 <div class="testimonial-form-label">Rating</div>
@@ -237,14 +261,17 @@
                 <div class="owl-carousel testimonial-carousel">
                     @foreach($testimoni as $t)
                         @php
-                            $foto = !empty($t->path_foto)
-                                ? asset('storage/'.$t->path_foto)
-                                : asset('frontend/img/testimonial-1.jpg');
                             $rating = (int)($t->rating ?? 5);
                         @endphp
                         <div class="testimonial-item">
                             <div class="d-flex align-items-center mb-3">
-                                <img class="img-fluid rounded" src="{{ $foto }}" alt="{{ $t->nama_klien }}" style="width:56px;height:56px;object-fit:cover;">
+                                @if(!empty($t->path_foto))
+                                    <img class="img-fluid rounded-circle" src="{{ asset('storage/'.$t->path_foto) }}" alt="{{ $t->nama_klien }}" style="width:56px;height:56px;object-fit:cover;">
+                                @else
+                                    <div class="d-flex justify-content-center align-items-center bg-light rounded-circle text-secondary" style="width:56px;height:56px;">
+                                        <i class="fas fa-user fa-lg"></i>
+                                    </div>
+                                @endif
                                 <div class="ml-3 text-left">
                                     <h4 class="mb-1">{{ $t->nama_klien }}</h4>
                                     <i class="text-muted">{{ $t->profesi ?: 'Pelanggan' }}</i>
@@ -331,6 +358,19 @@
             if (!input) return;
             function setRating(value) {
                 input.value = value;
+
+            // Update label input file custom
+            var fileInput = document.getElementById('path_foto');
+            if(fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        var fileName = e.target.files[0].name;
+                        var nextSibling = e.target.nextElementSibling;
+                        nextSibling.innerText = fileName;
+                        nextSibling.classList.remove('text-muted');
+                    }
+                });
+            }
                 stars.forEach(function (star) {
                     var starValue = parseInt(star.getAttribute('data-value'), 10);
                     if (starValue <= value) {

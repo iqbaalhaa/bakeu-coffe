@@ -6,9 +6,9 @@
 <div class="py-4 px-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="h4 mb-0">Testimoni</h2>
-        <a href="{{ route('admin.testimoni.create') }}" class="btn btn-primary">
+        {{-- <a href="{{ route('admin.testimoni.create') }}" class="btn btn-primary">
             + Tambah Testimoni
-        </a>
+        </a> --}}
     </div>
 
     <div class="card border-0 shadow">

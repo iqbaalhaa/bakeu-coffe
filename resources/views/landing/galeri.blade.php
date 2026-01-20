@@ -31,6 +31,12 @@
             object-fit: cover;
             width: 100%;
         }
+        .section-title::before,
+        .section-title::after,
+        .section-title h5::before,
+        .section-title h5::after,
+        .section-title h1::before,
+        .section-title h1::after { display: none !important; content: none !important; }
     </style>
 </head>
 <body>
@@ -46,22 +52,22 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto p-4">
                     <a href="{{ url('/') }}" class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Beranda</a>
-                    <a href="{{ url('/#tentang') }}" class="nav-item nav-link">Tentang Kami</a>
                     <a href="{{ route('produk.index') }}" class="nav-item nav-link {{ request()->routeIs('produk.*') ? 'active' : '' }}">Produk</a>
                     <a href="{{ route('galeri.index') }}" class="nav-item nav-link {{ request()->routeIs('galeri.index') ? 'active' : '' }}">Galeri</a>
                     <a href="{{ url('/#footer') }}" class="nav-item nav-link">Kontak</a>
+                    <a href="{{ url('/#tentang') }}" class="nav-item nav-link">Tentang Kami</a>
                 </div>
             </div>
         </nav>
     </div>
     <div class="navbar-spacer"></div>
 
-    <div class="container-fluid py-5">
+    <div class="container-fluid pt-1 pb-5">
         <div class="container">
-            <div class="section-title text-center mb-5">
-                <h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Galeri</h4>
-                <h1 class="display-4 fw-bold">Album Foto & Video Bakeu Coffee</h1>
-                <p class="text-muted mt-3">
+            <div class="section-title text-center mb-4">
+                <h5 class="text-primary text-uppercase" style="letter-spacing: 4px;">Galeri</h5>
+                <h1 class="display-5 fw-bold">Album Foto & Video</h1>
+                <p class="text-muted mt-2">
                     Pilih album untuk melihat kumpulan foto atau video di dalamnya.
                 </p>
             </div>
@@ -78,11 +84,11 @@
                             <div class="gallery-card">
                                 <img src="{{ $album->cover_path ? asset('storage/'.$album->cover_path) : asset('frontend/img/menu-1.jpg') }}" alt="{{ $album->judul }}" class="gallery-image">
                                 <div class="p-3 bg-white">
-                                    <h5 class="mb-1 text-truncate">{{ $album->judul }}</h5>
-                                    <div class="small text-muted">
+                                    <h6 class="mb-1 text-truncate font-weight-bold">{{ $album->judul }}</h6>
+                                    <div class="small text-muted" style="font-size: 0.8rem;">
                                         {{ $album->deskripsi }}
                                     </div>
-                                    <div class="small text-primary mt-1">
+                                    <div class="small text-primary mt-1" style="font-size: 0.75rem;">
                                         {{ $album->items->count() }} konten
                                     </div>
                                 </div>

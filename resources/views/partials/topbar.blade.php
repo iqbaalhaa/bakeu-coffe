@@ -24,9 +24,9 @@
                     <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="media d-flex align-items-center">
-                            <img class="avatar rounded-circle"
-                                 alt="Admin avatar"
-                                 src="{{ asset('backend/assets/img/team/profile-picture-3.jpg') }}">
+                            <div class="avatar rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white">
+                                <i class="bi bi-person-fill fs-4"></i>
+                            </div>
                             <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                                 <span class="mb-0 font-small fw-bold text-gray-900">
                                     {{ auth()->user()->name ?? 'Admin' }}

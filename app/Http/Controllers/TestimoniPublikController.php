@@ -15,13 +15,19 @@ class TestimoniPublikController extends Controller
             'profesi'         => 'nullable|string|max:255',
             'pesan_testimoni' => 'required|string',
             'rating'          => 'nullable|integer|min:1|max:5',
+            'path_foto'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
         $data['produk_id'] = $produk->id;
         $data['rating'] = isset($data['rating']) ? (int)$data['rating'] : null;
         $data['status_aktif'] = false;
         $data['urutan_tampil'] = null;
-        $data['path_foto'] = null;
+        
+        if ($request->hasFile('path_foto')) {
+            $data['path_foto'] = $request->file('path_foto')->store('testimoni', 'public');
+        } else {
+            $data['path_foto'] = null;
+        }
 
         Testimoni::create($data);
 

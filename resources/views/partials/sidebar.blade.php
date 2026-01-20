@@ -114,16 +114,7 @@
                     <span class="sidebar-text">Pesan Pengunjung</span>
                 </a>
             </li>
-
             {{-- Opsional: Highlight & Testimonial --}}
-            <li class="nav-item {{ request()->routeIs('admin.highlight.*') ? 'active' : '' }}">
-                <a href="{{ route('admin.highlight.index') }}" class="nav-link">
-                    <span class="sidebar-icon">
-                        <i class="bi bi-stars"></i>
-                    </span>
-                    <span class="sidebar-text">Highlight</span>
-                </a>
-            </li>
 
             <li class="nav-item {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">
                 <a href="{{ route('admin.testimoni.index') }}" class="nav-link">
