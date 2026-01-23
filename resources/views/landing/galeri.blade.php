@@ -150,6 +150,18 @@
                 <p><i class="fa fa-phone-alt mr-2"></i>{{ $profil->no_telepon ?? '-' }}</p>
                 <p><i class="fa fa-envelope mr-2"></i>{{ $profil->email ?? '-' }}</p>
             </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Ikuti Kami</h4>
+                <div class="d-flex justify-content-start">
+                    @forelse($mediaSosial as $sosmed)
+                        <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="{{ $sosmed->url }}" target="_blank" title="{{ $sosmed->nama_platform }}">
+                            <i class="{{ $sosmed->ikon_css ?? 'fa fa-globe' }}"></i>
+                        </a>
+                    @empty
+                        <p class="text-white-50">Belum ada media sosial.</p>
+                    @endforelse
+                </div>
+            </div>
         </div>
         <div class="text-center py-3" style="background: rgba(0,0,0,0.7);">
             <small>&copy; {{ date('Y') }} {{ $profil->nama_usaha ?? 'Bakeu Coffee' }}. All Rights Reserved.</small>

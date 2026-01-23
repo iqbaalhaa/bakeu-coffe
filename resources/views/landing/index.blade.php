@@ -421,10 +421,13 @@
             <div class="col-lg-3 col-md-6 mb-5">
                 <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Ikuti Kami</h4>
                 <div class="d-flex justify-content-start">
-                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a class="btn btn-lg btn-outline-light btn-lg-square" href="#"><i class="fab fa-instagram"></i></a>
+                    @forelse($mediaSosial as $sosmed)
+                        <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="{{ $sosmed->url }}" target="_blank" title="{{ $sosmed->nama_platform }}">
+                            <i class="{{ $sosmed->ikon_css ?? 'fa fa-globe' }}"></i>
+                        </a>
+                    @empty
+                        <p class="text-white-50">Belum ada media sosial.</p>
+                    @endforelse
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5">

@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MediaSosial;
-
-
+use Illuminate\Support\Facades\Log;
 
 class MediaSosialController extends Controller
 {
@@ -34,22 +33,36 @@ class MediaSosialController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nama_platform'  => 'required|string|max:100',
-            'nama_tampilan'  => 'nullable|string|max:100',
-            'url'            => 'required|url|max:255',
-            'ikon_css'       => 'nullable|string|max:100',
-            'urutan_tampil'  => 'nullable|integer|min:1',
-            'status_aktif'   => 'nullable|boolean',
-        ]);
+        Log::info('MediaSosial Store Attempt', $request->all());
 
-        $data['status_aktif'] = $request->has('status_aktif');
+        try {
+            $data = $request->validate([
+                'nama_platform'  => 'required|string|max:100',
+                'nama_tampilan'  => 'nullable|string|max:100',
+                'url'            => 'required|url|max:2048',
+                'ikon_css'       => 'nullable|string|max:100',
+                'urutan_tampil'  => 'nullable|integer|min:1',
+            ]);
 
-        MediaSosial::create($data);
+            $data['status_aktif'] = $request->has('status_aktif');
 
-        return redirect()
-            ->route('admin.media-sosial.index')
-            ->with('success', 'Media sosial berhasil ditambahkan.');
+            Log::info('MediaSosial Validation Passed', $data);
+
+            MediaSosial::create($data);
+
+            Log::info('MediaSosial Created Successfully');
+
+            return redirect()
+                ->route('admin.media-sosial.index')
+                ->with('success', 'Media sosial berhasil ditambahkan.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('MediaSosial Validation Error', $e->errors());
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('MediaSosial Store Error: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -67,22 +80,28 @@ class MediaSosialController extends Controller
      */
     public function update(Request $request, MediaSosial $media_sosial)
     {
-        $data = $request->validate([
-            'nama_platform'  => 'required|string|max:100',
-            'nama_tampilan'  => 'nullable|string|max:100',
-            'url'            => 'required|url|max:255',
-            'ikon_css'       => 'nullable|string|max:100',
-            'urutan_tampil'  => 'nullable|integer|min:1',
-            'status_aktif'   => 'nullable|boolean',
-        ]);
+        try {
+            $data = $request->validate([
+                'nama_platform'  => 'required|string|max:100',
+                'nama_tampilan'  => 'nullable|string|max:100',
+                'url'            => 'required|url|max:2048',
+                'ikon_css'       => 'nullable|string|max:100',
+                'urutan_tampil'  => 'nullable|integer|min:1',
+            ]);
 
-        $data['status_aktif'] = $request->has('status_aktif');
+            $data['status_aktif'] = $request->has('status_aktif');
 
-        $media_sosial->update($data);
+            $media_sosial->update($data);
 
-        return redirect()
-            ->route('admin.media-sosial.index')
-            ->with('success', 'Media sosial berhasil diperbarui.');
+            return redirect()
+                ->route('admin.media-sosial.index')
+                ->with('success', 'Media sosial berhasil diperbarui.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('MediaSosial Update Error: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Gagal memperbarui data: ' . $e->getMessage());
+        }
     }
 
     /**

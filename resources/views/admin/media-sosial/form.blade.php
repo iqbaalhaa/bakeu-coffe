@@ -34,9 +34,12 @@
 
     <div class="col-md-6 mb-3">
         <label class="form-label">Kelas Ikon (opsional)</label>
-        <input type="text" name="ikon_css" class="form-control"
+        <div class="input-group">
+            <span class="input-group-text"><i id="icon-preview" class="{{ old('ikon_css', $mediaSosial->ikon_css) ?: 'fas fa-globe' }}"></i></span>
+            <input type="text" name="ikon_css" id="ikon_css" class="form-control"
                value="{{ old('ikon_css', $mediaSosial->ikon_css) }}"
                placeholder="Contoh: fab fa-instagram">
+        </div>
         <small class="text-muted">Jika menggunakan Font Awesome, isikan kelas ikon di sini.</small>
     </div>
 
@@ -69,3 +72,45 @@
         Batal
     </a>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const iconInput = document.getElementById('ikon_css');
+        const iconPreview = document.getElementById('icon-preview');
+        const platformSelect = document.querySelector('select[name="nama_platform"]');
+
+        const iconMap = {
+            'instagram': 'fab fa-instagram',
+            'facebook': 'fab fa-facebook-f',
+            'tiktok': 'fab fa-tiktok',
+            'youtube': 'fab fa-youtube',
+            'whatsapp': 'fab fa-whatsapp',
+            'twitter/x': 'fab fa-twitter',
+            'linkedin': 'fab fa-linkedin-in',
+            'website lain': 'fas fa-globe'
+        };
+
+        function updateIcon() {
+            const platform = platformSelect.value.toLowerCase();
+            if (iconMap[platform]) {
+                iconInput.value = iconMap[platform];
+                if (iconPreview) {
+                    iconPreview.className = iconMap[platform];
+                }
+            }
+        }
+
+        if (platformSelect && iconInput) {
+            platformSelect.addEventListener('change', updateIcon);
+            
+            // Also update preview when manually typing
+            iconInput.addEventListener('input', function() {
+                if (iconPreview) {
+                    iconPreview.className = this.value || 'fas fa-globe';
+                }
+            });
+        }
+    });
+</script>
+@endpush
