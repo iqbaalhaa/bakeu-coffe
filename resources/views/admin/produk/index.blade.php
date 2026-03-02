@@ -32,7 +32,7 @@
                                         @if($p->path_gambar)
                                             <img src="{{ asset('assets/'.$p->path_gambar) }}" alt="{{ $p->nama_produk }}" style="height:40px;width:40px;object-fit:cover;border-radius:6px;" class="me-2">
                                         @else
-                                            <img src="{{ asset('frontend/img/menu-1.jpg') }}" alt="Placeholder" style="height:40px;width:40px;object-fit:cover;border-radius:6px;" class="me-2">
+                                            <span class="me-2 text-muted" style="display:inline-block;height:40px;width:40px;border-radius:6px;background:#eee;"></span>
                                         @endif
                                         <div>
                                             <div class="fw-bold">{{ $p->nama_produk }}</div>

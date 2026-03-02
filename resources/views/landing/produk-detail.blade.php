@@ -142,9 +142,13 @@
                 @php
                     $img = !empty($produk->path_gambar)
                         ? asset('assets/'.$produk->path_gambar)
-                        : asset('frontend/img/menu-1.jpg');
+                        : null;
                 @endphp
-                <img src="{{ $img }}" alt="{{ $produk->nama_produk }}" class="product-image-main shadow-sm">
+                @if($img)
+                    <img src="{{ $img }}" alt="{{ $produk->nama_produk }}" class="product-image-main shadow-sm">
+                @else
+                    <div class="product-image-main shadow-sm" style="background:#f1f1f1;"></div>
+                @endif
             </div>
             <div class="col-md-7">
                 <div class="mb-3">

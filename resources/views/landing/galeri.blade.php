@@ -82,7 +82,11 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#albumModal{{ $album->id }}">
                             <div class="gallery-card">
-                                <img src="{{ $album->cover_path ? asset('assets/'.$album->cover_path) : asset('frontend/img/menu-1.jpg') }}" alt="{{ $album->judul }}" class="gallery-image">
+                                @if($album->cover_path)
+                                    <img src="{{ asset('assets/'.$album->cover_path) }}" alt="{{ $album->judul }}" class="gallery-image">
+                                @else
+                                    <div class="gallery-image" style="background:#f1f1f1;"></div>
+                                @endif
                                 <div class="p-3 bg-white">
                                     <h6 class="mb-1 text-truncate font-weight-bold">{{ $album->judul }}</h6>
                                     <div class="small text-muted" style="font-size: 0.8rem;">

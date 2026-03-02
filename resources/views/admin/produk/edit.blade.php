@@ -64,8 +64,6 @@
                         <div class="mb-2">
                             <img src="{{ asset('assets/'.$produk->path_gambar) }}" alt="Gambar" style="max-height:80px;">
                         </div>
-                    @else
-                        <img src="{{ asset('frontend/img/menu-1.jpg') }}" alt="Placeholder" style="max-height:80px;" class="mb-2">
                     @endif
                     <input type="file" name="gambar" class="form-control">
                     <small class="text-muted">Format: JPG, PNG, WEBP. Maks 4 MB.</small>

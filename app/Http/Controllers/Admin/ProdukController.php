@@ -36,6 +36,12 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('Produk store pre-validate', [
+            'has_file' => $request->hasFile('gambar'),
+            'file_name' => $request->file('gambar')?->getClientOriginalName(),
+            'file_size' => $request->file('gambar')?->getSize(),
+            'file_mime' => $request->file('gambar')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'nama_produk'        => 'required|string|max:255',
             'kategori'           => 'nullable|string|max:100',
@@ -94,6 +100,9 @@ class ProdukController extends Controller
             }
             $data['path_gambar'] = 'produk/' . $filename;
         }
+        else {
+            Log::info('Produk store no file provided');
+        }
 
         Produk::create($data);
 
@@ -115,6 +124,12 @@ class ProdukController extends Controller
      */
     public function update(Request $request, Produk $produk)
     {
+        Log::info('Produk update pre-validate', [
+            'has_file' => $request->hasFile('gambar'),
+            'file_name' => $request->file('gambar')?->getClientOriginalName(),
+            'file_size' => $request->file('gambar')?->getSize(),
+            'file_mime' => $request->file('gambar')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'nama_produk'        => 'required|string|max:255',
             'kategori'           => 'nullable|string|max:100',

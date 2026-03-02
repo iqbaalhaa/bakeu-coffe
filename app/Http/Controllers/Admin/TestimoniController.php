@@ -42,6 +42,12 @@ class TestimoniController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('Testimoni store pre-validate', [
+            'has_file' => $request->hasFile('foto'),
+            'file_name' => $request->file('foto')?->getClientOriginalName(),
+            'file_size' => $request->file('foto')?->getSize(),
+            'file_mime' => $request->file('foto')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'produk_id'       => 'nullable|exists:produk,id',
             'nama_klien'      => 'required|string|max:255',
@@ -98,6 +104,9 @@ class TestimoniController extends Controller
             }
             $data['path_foto'] = 'testimoni/' . $filename;
         }
+        else {
+            Log::info('Testimoni store no file provided');
+        }
 
         try {
             Testimoni::create($data);
@@ -126,6 +135,12 @@ class TestimoniController extends Controller
      */
     public function update(Request $request, Testimoni $testimoni)
     {
+        Log::info('Testimoni update pre-validate', [
+            'has_file' => $request->hasFile('foto'),
+            'file_name' => $request->file('foto')?->getClientOriginalName(),
+            'file_size' => $request->file('foto')?->getSize(),
+            'file_mime' => $request->file('foto')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'produk_id'       => 'nullable|exists:produk,id',
             'nama_klien'      => 'required|string|max:255',

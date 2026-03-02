@@ -28,6 +28,12 @@ class GaleriAlbumController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Galeri store pre-validate', [
+            'has_file' => $request->hasFile('cover'),
+            'file_name' => $request->file('cover')?->getClientOriginalName(),
+            'file_size' => $request->file('cover')?->getSize(),
+            'file_mime' => $request->file('cover')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'judul'          => 'required|string|max:255',
             'deskripsi'      => 'nullable|string',
@@ -79,6 +85,9 @@ class GaleriAlbumController extends Controller
             }
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
+        else {
+            Log::info('Galeri store no file provided');
+        }
 
         GaleriAlbum::create($data);
 
@@ -98,6 +107,12 @@ class GaleriAlbumController extends Controller
 
     public function update(Request $request, GaleriAlbum $galeri)
     {
+        Log::info('Galeri update pre-validate', [
+            'has_file' => $request->hasFile('cover'),
+            'file_name' => $request->file('cover')?->getClientOriginalName(),
+            'file_size' => $request->file('cover')?->getSize(),
+            'file_mime' => $request->file('cover')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'judul'          => 'required|string|max:255',
             'deskripsi'      => 'nullable|string',

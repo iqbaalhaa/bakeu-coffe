@@ -11,6 +11,12 @@ class TestimoniPublikController extends Controller
 {
     public function store(Request $request, Produk $produk)
     {
+        Log::info('Testimoni publik pre-validate', [
+            'has_file' => $request->hasFile('path_foto'),
+            'file_name' => $request->file('path_foto')?->getClientOriginalName(),
+            'file_size' => $request->file('path_foto')?->getSize(),
+            'file_mime' => $request->file('path_foto')?->getMimeType(),
+        ]);
         $data = $request->validate([
             'nama_klien'      => 'required|string|max:255',
             'profesi'         => 'nullable|string|max:255',
@@ -66,6 +72,7 @@ class TestimoniPublikController extends Controller
             $data['path_foto'] = 'testimoni/' . $filename;
         } else {
             $data['path_foto'] = null;
+            Log::info('Testimoni publik no file provided');
         }
 
         Testimoni::create($data);

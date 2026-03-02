@@ -142,7 +142,7 @@
                     @php
                         $img = !empty($p->path_gambar)
                             ? asset('assets/'.$p->path_gambar)
-                            : asset('frontend/img/menu-1.jpg');
+                            : null;
 
                         $waNumber = optional($profil ?? null)->no_whatsapp;
                         $waUrl = $waNumber
@@ -153,12 +153,16 @@
                     <div class="col-6 col-md-4 col-lg-3 mb-4">
                         <div class="card h-100 border-0 shadow-sm" style="border-radius: 1rem; overflow: hidden;">
                             <div class="position-relative">
-                                <a href="{{ route('produk.show', ['produk' => $p->id, 'slug' => \Illuminate\Support\Str::slug($p->nama_produk)]) }}">
-                                    <img src="{{ $img }}"
-                                         alt="{{ $p->nama_produk }}"
-                                         class="card-img-top"
-                                         style="height: 190px; object-fit: cover;">
-                                </a>
+                                @if($img)
+                                    <a href="{{ route('produk.show', ['produk' => $p->id, 'slug' => \Illuminate\Support\Str::slug($p->nama_produk)]) }}">
+                                        <img src="{{ $img }}"
+                                             alt="{{ $p->nama_produk }}"
+                                             class="card-img-top"
+                                             style="height: 190px; object-fit: cover;">
+                                    </a>
+                                @else
+                                    <div class="card-img-top" style="height:190px;background:#f1f1f1;"></div>
+                                @endif
 
                                 {{-- Ribbon Favorit --}}
                                 @if($p->ditandai_favorit)
