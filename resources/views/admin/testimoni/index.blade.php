@@ -34,7 +34,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="d-flex align-items-center gap-2">
                                         @if($t->path_foto)
-                                            <img src="{{ asset('storage/'.$t->path_foto) }}"
+                                            <img src="{{ asset('assets/'.$t->path_foto) }}"
                                                  alt="{{ $t->nama_klien }}"
                                                  class="rounded-circle"
                                                  style="width:32px;height:32px;object-fit:cover;">

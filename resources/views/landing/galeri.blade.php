@@ -43,7 +43,7 @@
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3 navbar-coffee">
             <a href="{{ url('/') }}" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
-                <img src="{{ isset($profil) && $profil->path_logo ? asset('storage/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
+                <img src="{{ isset($profil) && $profil->path_logo ? asset('assets/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
                 <h1 class="m-0 display-6 text-uppercase text-white">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -82,7 +82,7 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#albumModal{{ $album->id }}">
                             <div class="gallery-card">
-                                <img src="{{ $album->cover_path ? asset('storage/'.$album->cover_path) : asset('frontend/img/menu-1.jpg') }}" alt="{{ $album->judul }}" class="gallery-image">
+                                <img src="{{ $album->cover_path ? asset('assets/'.$album->cover_path) : asset('frontend/img/menu-1.jpg') }}" alt="{{ $album->judul }}" class="gallery-image">
                                 <div class="p-3 bg-white">
                                     <h6 class="mb-1 text-truncate font-weight-bold">{{ $album->judul }}</h6>
                                     <div class="small text-muted" style="font-size: 0.8rem;">
@@ -122,7 +122,7 @@
                             @foreach($album->items as $item)
                                 <div class="col-md-6 mb-3">
                                     @if($item->tipe === 'image' && $item->path_file)
-                                        <img src="{{ asset('storage/'.$item->path_file) }}" alt="{{ $item->judul ?? $album->judul }}" class="img-fluid rounded mb-2">
+                                        <img src="{{ asset('assets/'.$item->path_file) }}" alt="{{ $item->judul ?? $album->judul }}" class="img-fluid rounded mb-2">
                                     @else
                                         @if($item->url_video)
                                             <div class="embed-responsive embed-responsive-16by9 mb-2">

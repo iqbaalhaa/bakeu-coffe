@@ -62,7 +62,7 @@
                     <label class="form-label d-block">Gambar Produk</label>
                     @if($produk->path_gambar)
                         <div class="mb-2">
-                            <img src="{{ asset('storage/'.$produk->path_gambar) }}" alt="Gambar" style="max-height:80px;">
+                            <img src="{{ asset('assets/produk/'.$produk->path_gambar) }}" alt="Gambar" style="max-height:80px;">
                         </div>
                     @else
                         <img src="{{ asset('frontend/img/menu-1.jpg') }}" alt="Placeholder" style="max-height:80px;" class="mb-2">

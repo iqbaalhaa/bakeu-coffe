@@ -30,7 +30,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if($p->path_gambar)
-                                            <img src="{{ asset('storage/'.$p->path_gambar) }}" alt="{{ $p->nama_produk }}" style="height:40px;width:40px;object-fit:cover;border-radius:6px;" class="me-2">
+                                            <img src="{{ asset('assets/produk/'.$p->path_gambar) }}" alt="{{ $p->nama_produk }}" style="height:40px;width:40px;object-fit:cover;border-radius:6px;" class="me-2">
                                         @else
                                             <img src="{{ asset('frontend/img/menu-1.jpg') }}" alt="Placeholder" style="height:40px;width:40px;object-fit:cover;border-radius:6px;" class="me-2">
                                         @endif

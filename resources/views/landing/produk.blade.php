@@ -22,14 +22,79 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('frontend/css/style.min.css') }}" rel="stylesheet">
     <style>
-        .navbar-coffee { background: rgba(33,30,27,0.92); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
-        .section-title::before,
-        .section-title::after,
-        .section-title h4::before,
-        .section-title h4::after,
-        .section-title h1::before,
-        .section-title h1::after { display: none !important; content: none !important; }
-        .navbar-spacer { height: 110px; }
+        .product-card {
+            border-radius: 1rem;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.10);
+        }
+
+        .product-image {
+            height: 190px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-ribbon {
+            position: absolute;
+            top: 12px;
+            left: -40px;
+            background: #ffc107;
+            color: #000;
+            padding: 4px 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transform: rotate(-45deg);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 8px;
+            border-radius: 999px;
+            opacity: 0.95;
+        }
+
+        /* Highlight cards inside dark overlay section */
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1rem;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(3px);
+        }
+        .highlight-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+        .highlight-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .highlight-badge {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
     </style>
 </head>
 
@@ -38,7 +103,7 @@
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3 navbar-coffee">
             <a href="{{ url('/') }}" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
-                <img src="{{ isset($profil) && $profil->path_logo ? asset('storage/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
+                <img src="{{ isset($profil) && $profil->path_logo ? asset('assets/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
                 <h1 class="m-0 display-6 text-uppercase text-white">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -76,7 +141,7 @@
                 @forelse($produk as $p)
                     @php
                         $img = !empty($p->path_gambar)
-                            ? asset('storage/'.$p->path_gambar)
+                            ? asset('assets/'.$p->path_gambar)
                             : asset('frontend/img/menu-1.jpg');
 
                         $waNumber = optional($profil ?? null)->no_whatsapp;

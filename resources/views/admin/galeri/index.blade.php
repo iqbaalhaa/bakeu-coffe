@@ -38,7 +38,7 @@
                                     <td>{{ \Illuminate\Support\Str::limit($album->deskripsi, 60) }}</td>
                                     <td>
                                         @if($album->cover_path)
-                                            <img src="{{ asset('storage/'.$album->cover_path) }}" alt="Cover" style="height:50px;border-radius:8px;">
+                                            <img src="{{ asset('assets/'.$album->cover_path) }}" alt="Cover" style="height:50px;border-radius:8px;">
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
@@ -77,4 +77,3 @@
     </div>
 </div>
 @endsection
-

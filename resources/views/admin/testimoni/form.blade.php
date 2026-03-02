@@ -71,7 +71,7 @@
         <label class="form-label d-block">Foto Klien (opsional)</label>
         @if($testimoni->path_foto)
             <div class="mb-2">
-                <img src="{{ asset('storage/'.$testimoni->path_foto) }}"
+                <img src="{{ asset('assets/'.$testimoni->path_foto) }}"
                      alt="{{ $testimoni->nama_klien }}"
                      class="rounded-circle"
                      style="width:60px;height:60px;object-fit:cover;">

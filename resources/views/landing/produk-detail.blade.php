@@ -104,7 +104,7 @@
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3 navbar-coffee">
             <a href="{{ url('/') }}" class="navbar-brand px-lg-4 m-0 d-flex align-items-center">
-                <img src="{{ isset($profil) && $profil->path_logo ? asset('storage/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
+                <img src="{{ isset($profil) && $profil->path_logo ? asset('assets/'.$profil->path_logo) : asset('frontend/img/logobakeu.jpeg') }}" alt="Logo" class="mr-2" style="height: 50px; border-radius: 15px">
                 <h1 class="m-0 display-6 text-uppercase text-white">{{ $profil->nama_usaha ?? 'BAKEU COFFEE' }}</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -141,7 +141,7 @@
             <div class="col-md-5 mb-4 mb-md-0">
                 @php
                     $img = !empty($produk->path_gambar)
-                        ? asset('storage/'.$produk->path_gambar)
+                        ? asset('assets/'.$produk->path_gambar)
                         : asset('frontend/img/menu-1.jpg');
                 @endphp
                 <img src="{{ $img }}" alt="{{ $produk->nama_produk }}" class="product-image-main shadow-sm">
@@ -266,7 +266,7 @@
                         <div class="testimonial-item">
                             <div class="d-flex align-items-center mb-3">
                                 @if(!empty($t->path_foto))
-                                    <img class="img-fluid rounded-circle" src="{{ asset('storage/'.$t->path_foto) }}" alt="{{ $t->nama_klien }}" style="width:56px;height:56px;object-fit:cover;">
+                                    <img class="img-fluid rounded-circle" src="{{ asset('assets/'.$t->path_foto) }}" alt="{{ $t->nama_klien }}" style="width:56px;height:56px;object-fit:cover;">
                                 @else
                                     <div class="d-flex justify-content-center align-items-center bg-light rounded-circle text-secondary" style="width:56px;height:56px;">
                                         <i class="fas fa-user fa-lg"></i>

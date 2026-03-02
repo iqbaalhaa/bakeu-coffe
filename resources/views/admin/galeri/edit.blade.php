@@ -42,7 +42,7 @@
                         <label class="form-label d-block">Cover Album</label>
                         @if($album->cover_path)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/'.$album->cover_path) }}" alt="Cover" style="max-height:120px;border-radius:10px;">
+                                <img src="{{ asset('assets/'.$album->cover_path) }}" alt="Cover" style="max-height:120px;border-radius:10px;">
                             </div>
                         @else
                             <div class="mb-2 text-muted small">Belum ada cover.</div>
@@ -110,7 +110,7 @@
                             <div class="border rounded h-100 d-flex flex-column">
                                 <div class="p-2">
                                     @if($item->tipe === 'image' && $item->path_file)
-                                        <img src="{{ asset('storage/'.$item->path_file) }}" alt="{{ $item->judul ?? '' }}" style="width:100%;height:150px;object-fit:cover;border-radius:6px;">
+                                        <img src="{{ asset('assets/'.$item->path_file) }}" alt="{{ $item->judul ?? '' }}" style="width:100%;height:150px;object-fit:cover;border-radius:6px;">
                                     @elseif($item->tipe === 'video' && $item->url_video)
                                         <div class="embed-responsive embed-responsive-16by9">
                                             <iframe class="embed-responsive-item" src="{{ $item->url_video }}" allowfullscreen></iframe>
@@ -146,4 +146,3 @@
     </div>
 </div>
 @endsection
-

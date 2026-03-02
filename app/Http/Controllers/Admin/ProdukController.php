@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Produk;
-use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
@@ -54,15 +53,23 @@ class ProdukController extends Controller
 
         // Upload gambar jika ada
         if ($request->hasFile('gambar')) {
-            $data['path_gambar'] = $request->file('gambar')->store('produk', 'public');
+            $file = $request->file('gambar');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/produk'), $filename);
+            $data['path_gambar'] = 'produk/' . $filename;
         } else {
             // Pasang gambar default bila tidak ada upload
             $defaultSource = public_path('frontend/img/menu-1.jpg');
-            $defaultTarget = 'produk/default.jpg';
-            if (is_file($defaultSource) && !Storage::disk('public')->exists($defaultTarget)) {
-                Storage::disk('public')->put($defaultTarget, file_get_contents($defaultSource));
+            $targetPath = public_path('assets/produk/default.jpg');
+            
+            if (!file_exists(dirname($targetPath))) {
+                mkdir(dirname($targetPath), 0755, true);
             }
-            $data['path_gambar'] = $defaultTarget;
+
+            if (is_file($defaultSource) && !file_exists($targetPath)) {
+                copy($defaultSource, $targetPath);
+            }
+            $data['path_gambar'] = 'produk/default.jpg';
         }
 
         Produk::create($data);
@@ -102,18 +109,27 @@ class ProdukController extends Controller
 
         // Upload gambar baru jika ada
         if ($request->hasFile('gambar')) {
-            if ($produk->path_gambar) {
-                Storage::disk('public')->delete($produk->path_gambar);
+            if ($produk->path_gambar && file_exists(public_path('assets/' . $produk->path_gambar))) {
+                unlink(public_path('assets/' . $produk->path_gambar));
             }
-            $data['path_gambar'] = $request->file('gambar')->store('produk', 'public');
+            
+            $file = $request->file('gambar');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/produk'), $filename);
+            $data['path_gambar'] = 'produk/' . $filename;
         } else if (empty($produk->path_gambar)) {
             // Pastikan ada default jika sebelumnya kosong
             $defaultSource = public_path('frontend/img/menu-1.jpg');
-            $defaultTarget = 'produk/default.jpg';
-            if (is_file($defaultSource) && !Storage::disk('public')->exists($defaultTarget)) {
-                Storage::disk('public')->put($defaultTarget, file_get_contents($defaultSource));
+            $targetPath = public_path('assets/produk/default.jpg');
+            
+            if (!file_exists(dirname($targetPath))) {
+                mkdir(dirname($targetPath), 0755, true);
             }
-            $data['path_gambar'] = $defaultTarget;
+
+            if (is_file($defaultSource) && !file_exists($targetPath)) {
+                copy($defaultSource, $targetPath);
+            }
+            $data['path_gambar'] = 'produk/default.jpg';
         }
 
         $produk->fill($data);
@@ -129,8 +145,8 @@ class ProdukController extends Controller
      */
     public function destroy(Produk $produk)
     {
-        if ($produk->path_gambar) {
-            Storage::disk('public')->delete($produk->path_gambar);
+        if ($produk->path_gambar && file_exists(public_path('assets/' . $produk->path_gambar))) {
+            unlink(public_path('assets/' . $produk->path_gambar));
         }
 
         $produk->delete();

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\GaleriAlbum;
 use App\Models\GaleriItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class GaleriAlbumController extends Controller
 {
@@ -39,7 +38,10 @@ class GaleriAlbumController extends Controller
         $data['status_aktif'] = $request->boolean('status_aktif');
 
         if ($request->hasFile('cover')) {
-            $data['cover_path'] = $request->file('cover')->store('galeri/cover', 'public');
+            $file = $request->file('cover');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/galeri/cover'), $filename);
+            $data['cover_path'] = 'galeri/cover/' . $filename;
         }
 
         GaleriAlbum::create($data);
@@ -71,11 +73,14 @@ class GaleriAlbumController extends Controller
         $data['status_aktif'] = $request->boolean('status_aktif');
 
         if ($request->hasFile('cover')) {
-            if ($galeri->cover_path) {
-                Storage::disk('public')->delete($galeri->cover_path);
+            if ($galeri->cover_path && file_exists(public_path('assets/' . $galeri->cover_path))) {
+                unlink(public_path('assets/' . $galeri->cover_path));
             }
 
-            $data['cover_path'] = $request->file('cover')->store('galeri/cover', 'public');
+            $file = $request->file('cover');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/galeri/cover'), $filename);
+            $data['cover_path'] = 'galeri/cover/' . $filename;
         }
 
         $galeri->update($data);
@@ -87,8 +92,8 @@ class GaleriAlbumController extends Controller
 
     public function destroy(GaleriAlbum $galeri)
     {
-        if ($galeri->cover_path) {
-            Storage::disk('public')->delete($galeri->cover_path);
+        if ($galeri->cover_path && file_exists(public_path('assets/' . $galeri->cover_path))) {
+            unlink(public_path('assets/' . $galeri->cover_path));
         }
 
         $galeri->delete();

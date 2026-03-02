@@ -24,7 +24,10 @@ class TestimoniPublikController extends Controller
         $data['urutan_tampil'] = null;
         
         if ($request->hasFile('path_foto')) {
-            $data['path_foto'] = $request->file('path_foto')->store('testimoni', 'public');
+            $file = $request->file('path_foto');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/testimoni'), $filename);
+            $data['path_foto'] = 'testimoni/' . $filename;
         } else {
             $data['path_foto'] = null;
         }

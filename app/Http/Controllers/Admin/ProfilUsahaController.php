@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProfilUsaha;
-use Illuminate\Support\Facades\Storage;
 
 class ProfilUsahaController extends Controller
 {
@@ -62,18 +61,24 @@ class ProfilUsahaController extends Controller
 
         // Upload logo jika ada
         if ($request->hasFile('logo')) {
-            if ($profil->path_logo) {
-                Storage::disk('public')->delete($profil->path_logo);
+            if ($profil->path_logo && file_exists(public_path('assets/' . $profil->path_logo))) {
+                unlink(public_path('assets/' . $profil->path_logo));
             }
-            $data['path_logo'] = $request->file('logo')->store('profil_usaha/logo', 'public');
+            $file = $request->file('logo');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/profil_usaha/logo'), $filename);
+            $data['path_logo'] = 'profil_usaha/logo/' . $filename;
         }
 
         // Upload gambar hero jika ada
         if ($request->hasFile('gambar_hero')) {
-            if ($profil->path_gambar_hero) {
-                Storage::disk('public')->delete($profil->path_gambar_hero);
+            if ($profil->path_gambar_hero && file_exists(public_path('assets/' . $profil->path_gambar_hero))) {
+                unlink(public_path('assets/' . $profil->path_gambar_hero));
             }
-            $data['path_gambar_hero'] = $request->file('gambar_hero')->store('profil_usaha/hero', 'public');
+            $file = $request->file('gambar_hero');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/profil_usaha/hero'), $filename);
+            $data['path_gambar_hero'] = 'profil_usaha/hero/' . $filename;
         }
 
         $profil->fill($data);

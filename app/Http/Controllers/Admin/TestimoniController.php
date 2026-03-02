@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimoni;
 use App\Models\Produk;
-use Illuminate\Support\Facades\Storage;
 
 
 class TestimoniController extends Controller
@@ -58,7 +57,10 @@ class TestimoniController extends Controller
         $data['urutan_tampil'] = isset($data['urutan_tampil']) ? (int)$data['urutan_tampil'] : null;
 
         if ($request->hasFile('foto')) {
-            $data['path_foto'] = $request->file('foto')->store('testimoni', 'public');
+            $file = $request->file('foto');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/testimoni'), $filename);
+            $data['path_foto'] = 'testimoni/' . $filename;
         }
 
         try {
@@ -103,10 +105,14 @@ class TestimoniController extends Controller
         $data['urutan_tampil'] = isset($data['urutan_tampil']) ? (int)$data['urutan_tampil'] : null;
 
         if ($request->hasFile('foto')) {
-            if ($testimoni->path_foto) {
-                Storage::disk('public')->delete($testimoni->path_foto);
+            if ($testimoni->path_foto && file_exists(public_path('assets/' . $testimoni->path_foto))) {
+                unlink(public_path('assets/' . $testimoni->path_foto));
             }
-            $data['path_foto'] = $request->file('foto')->store('testimoni', 'public');
+            
+            $file = $request->file('foto');
+            $filename = $file->hashName();
+            $file->move(public_path('assets/testimoni'), $filename);
+            $data['path_foto'] = 'testimoni/' . $filename;
         }
         try {
             $testimoni->update($data);
@@ -123,8 +129,8 @@ class TestimoniController extends Controller
      */
     public function destroy(Testimoni $testimoni)
     {
-        if ($testimoni->path_foto) {
-            Storage::disk('public')->delete($testimoni->path_foto);
+        if ($testimoni->path_foto && file_exists(public_path('assets/' . $testimoni->path_foto))) {
+            unlink(public_path('assets/' . $testimoni->path_foto));
         }
 
         $testimoni->delete();
