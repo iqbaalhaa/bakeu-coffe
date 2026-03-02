@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProfilUsaha;
+use Illuminate\Support\Facades\Log;
 
 class ProfilUsahaController extends Controller
 {
@@ -67,10 +68,32 @@ class ProfilUsahaController extends Controller
             $file = $request->file('logo');
             $filename = $file->hashName();
             $logoDir = public_path('assets/profil_usaha/logo');
+            Log::info('Profil logo upload init', [
+                'dir' => $logoDir,
+                'file_valid' => $file->isValid(),
+                'tmp' => $file->getPathname(),
+                'orig' => $file->getClientOriginalName(),
+                'hash' => $filename,
+                'dir_exists' => file_exists($logoDir),
+                'is_dir' => is_dir($logoDir),
+            ]);
             if (!is_dir($logoDir)) {
                 mkdir($logoDir, 0755, true);
+                Log::info('Profil logo mkdir executed', [
+                    'dir_created' => is_dir($logoDir),
+                    'dir_writable' => is_writable($logoDir),
+                ]);
             }
-            $file->move($logoDir, $filename);
+            try {
+                $file->move($logoDir, $filename);
+                Log::info('Profil logo file moved', [
+                    'target' => $logoDir . DIRECTORY_SEPARATOR . $filename,
+                    'exists' => file_exists($logoDir . DIRECTORY_SEPARATOR . $filename),
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Profil logo move failed', ['error' => $e->getMessage()]);
+                return back()->withErrors(['logo' => 'Gagal menyimpan logo: ' . $e->getMessage()])->withInput();
+            }
             $data['path_logo'] = 'profil_usaha/logo/' . $filename;
         }
 
@@ -82,10 +105,32 @@ class ProfilUsahaController extends Controller
             $file = $request->file('gambar_hero');
             $filename = $file->hashName();
             $heroDir = public_path('assets/profil_usaha/hero');
+            Log::info('Profil hero upload init', [
+                'dir' => $heroDir,
+                'file_valid' => $file->isValid(),
+                'tmp' => $file->getPathname(),
+                'orig' => $file->getClientOriginalName(),
+                'hash' => $filename,
+                'dir_exists' => file_exists($heroDir),
+                'is_dir' => is_dir($heroDir),
+            ]);
             if (!is_dir($heroDir)) {
                 mkdir($heroDir, 0755, true);
+                Log::info('Profil hero mkdir executed', [
+                    'dir_created' => is_dir($heroDir),
+                    'dir_writable' => is_writable($heroDir),
+                ]);
             }
-            $file->move($heroDir, $filename);
+            try {
+                $file->move($heroDir, $filename);
+                Log::info('Profil hero file moved', [
+                    'target' => $heroDir . DIRECTORY_SEPARATOR . $filename,
+                    'exists' => file_exists($heroDir . DIRECTORY_SEPARATOR . $filename),
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Profil hero move failed', ['error' => $e->getMessage()]);
+                return back()->withErrors(['gambar_hero' => 'Gagal menyimpan gambar hero: ' . $e->getMessage()])->withInput();
+            }
             $data['path_gambar_hero'] = 'profil_usaha/hero/' . $filename;
         }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\GaleriAlbum;
 use App\Models\GaleriItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GaleriAlbumController extends Controller
 {
@@ -41,10 +42,32 @@ class GaleriAlbumController extends Controller
             $file = $request->file('cover');
             $filename = $file->hashName();
             $dir = public_path('assets/galeri/cover');
+            Log::info('Galeri store upload init', [
+                'dir' => $dir,
+                'file_valid' => $file->isValid(),
+                'tmp' => $file->getPathname(),
+                'orig' => $file->getClientOriginalName(),
+                'hash' => $filename,
+                'dir_exists' => file_exists($dir),
+                'is_dir' => is_dir($dir),
+            ]);
             if (!is_dir($dir)) {
                 mkdir($dir, 0755, true);
+                Log::info('Galeri store mkdir executed', [
+                    'dir_created' => is_dir($dir),
+                    'dir_writable' => is_writable($dir),
+                ]);
             }
-            $file->move($dir, $filename);
+            try {
+                $file->move($dir, $filename);
+                Log::info('Galeri store file moved', [
+                    'target' => $dir . DIRECTORY_SEPARATOR . $filename,
+                    'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Galeri store move failed', ['error' => $e->getMessage()]);
+                return back()->withErrors(['cover' => 'Gagal menyimpan cover: ' . $e->getMessage()])->withInput();
+            }
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
 
@@ -84,10 +107,32 @@ class GaleriAlbumController extends Controller
             $file = $request->file('cover');
             $filename = $file->hashName();
             $dir = public_path('assets/galeri/cover');
+            Log::info('Galeri update upload init', [
+                'dir' => $dir,
+                'file_valid' => $file->isValid(),
+                'tmp' => $file->getPathname(),
+                'orig' => $file->getClientOriginalName(),
+                'hash' => $filename,
+                'dir_exists' => file_exists($dir),
+                'is_dir' => is_dir($dir),
+            ]);
             if (!is_dir($dir)) {
                 mkdir($dir, 0755, true);
+                Log::info('Galeri update mkdir executed', [
+                    'dir_created' => is_dir($dir),
+                    'dir_writable' => is_writable($dir),
+                ]);
             }
-            $file->move($dir, $filename);
+            try {
+                $file->move($dir, $filename);
+                Log::info('Galeri update file moved', [
+                    'target' => $dir . DIRECTORY_SEPARATOR . $filename,
+                    'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Galeri update move failed', ['error' => $e->getMessage()]);
+                return back()->withErrors(['cover' => 'Gagal menyimpan cover: ' . $e->getMessage()])->withInput();
+            }
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
 
