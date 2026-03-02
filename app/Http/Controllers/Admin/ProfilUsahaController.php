@@ -91,8 +91,17 @@ class ProfilUsahaController extends Controller
                     'exists' => file_exists($logoDir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Profil logo move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['logo' => 'Gagal menyimpan logo: ' . $e->getMessage()])->withInput();
+                Log::error('Profil logo move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $logoDir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Profil logo fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['logo' => 'Gagal menyimpan logo (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['path_logo'] = 'profil_usaha/logo/' . $filename;
         }
@@ -128,8 +137,17 @@ class ProfilUsahaController extends Controller
                     'exists' => file_exists($heroDir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Profil hero move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['gambar_hero' => 'Gagal menyimpan gambar hero: ' . $e->getMessage()])->withInput();
+                Log::error('Profil hero move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $heroDir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Profil hero fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['gambar_hero' => 'Gagal menyimpan gambar hero (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['path_gambar_hero'] = 'profil_usaha/hero/' . $filename;
         }

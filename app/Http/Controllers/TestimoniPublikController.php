@@ -51,8 +51,17 @@ class TestimoniPublikController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Testimoni publik move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['path_foto' => 'Gagal menyimpan foto: ' . $e->getMessage()]);
+                Log::error('Testimoni publik move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Testimoni publik fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['path_foto' => 'Gagal menyimpan foto (fallback): ' . $e->getMessage()]);
+                }
             }
             $data['path_foto'] = 'testimoni/' . $filename;
         } else {

@@ -84,8 +84,17 @@ class TestimoniController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Testimoni store move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['foto' => 'Gagal menyimpan foto: ' . $e->getMessage()])->withInput();
+                Log::error('Testimoni store move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Testimoni store fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['foto' => 'Gagal menyimpan foto (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['path_foto'] = 'testimoni/' . $filename;
         }
@@ -162,8 +171,17 @@ class TestimoniController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Testimoni update move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['foto' => 'Gagal menyimpan foto: ' . $e->getMessage()])->withInput();
+                Log::error('Testimoni update move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Testimoni update fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['foto' => 'Gagal menyimpan foto (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['path_foto'] = 'testimoni/' . $filename;
         }

@@ -80,8 +80,17 @@ class ProdukController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Produk store move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['gambar' => 'Gagal menyimpan gambar: ' . $e->getMessage()])->withInput();
+                Log::error('Produk store move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Produk store fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['gambar' => 'Gagal menyimpan gambar (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['path_gambar'] = 'produk/' . $filename;
         }
@@ -153,8 +162,17 @@ class ProdukController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Produk update move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['gambar' => 'Gagal menyimpan gambar: ' . $e->getMessage()])->withInput();
+                Log::error('Produk update move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Produk update fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['gambar' => 'Gagal menyimpan gambar (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['path_gambar'] = 'produk/' . $filename;
         }

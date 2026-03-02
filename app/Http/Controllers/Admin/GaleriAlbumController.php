@@ -65,8 +65,17 @@ class GaleriAlbumController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Galeri store move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['cover' => 'Gagal menyimpan cover: ' . $e->getMessage()])->withInput();
+                Log::error('Galeri store move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Galeri store fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['cover' => 'Gagal menyimpan cover (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
@@ -130,8 +139,17 @@ class GaleriAlbumController extends Controller
                     'exists' => file_exists($dir . DIRECTORY_SEPARATOR . $filename),
                 ]);
             } catch (\Throwable $e) {
-                Log::error('Galeri update move failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['cover' => 'Gagal menyimpan cover: ' . $e->getMessage()])->withInput();
+                Log::error('Galeri update move failed', ['error' => $e->getMessage(), 'tmp' => $file->getPathname()]);
+                $target = $dir . DIRECTORY_SEPARATOR . $filename;
+                $copied = @copy($file->getPathname(), $target);
+                Log::info('Galeri update fallback copy', [
+                    'target' => $target,
+                    'copied' => $copied,
+                    'exists' => file_exists($target),
+                ]);
+                if (!$copied || !file_exists($target)) {
+                    return back()->withErrors(['cover' => 'Gagal menyimpan cover (fallback): ' . $e->getMessage()])->withInput();
+                }
             }
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
