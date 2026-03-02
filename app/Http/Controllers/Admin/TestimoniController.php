@@ -58,7 +58,12 @@ class TestimoniController extends Controller
                 Log::warning('Testimoni store pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Testimoni store pre-validate', ['has_file' => false]);
+            Log::info('Testimoni store pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'produk_id'       => 'nullable|exists:produk,id',
@@ -67,7 +72,7 @@ class TestimoniController extends Controller
             'pesan_testimoni' => 'required|string',
             'rating'          => 'nullable|integer|min:1|max:5',
             'urutan_tampil'   => 'nullable|integer|min:0',
-            'foto'            => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'foto'            => 'nullable|file|mimes:jpg,jpeg,png,webp|max:4096',
             'status_aktif'    => 'nullable|boolean',
         ]);
 
@@ -163,7 +168,12 @@ class TestimoniController extends Controller
                 Log::warning('Testimoni update pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Testimoni update pre-validate', ['has_file' => false]);
+            Log::info('Testimoni update pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'produk_id'       => 'nullable|exists:produk,id',
@@ -172,7 +182,7 @@ class TestimoniController extends Controller
             'pesan_testimoni' => 'required|string',
             'rating'          => 'nullable|integer|min:1|max:5',
             'urutan_tampil'   => 'nullable|integer|min:0',
-            'foto'            => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'foto'            => 'nullable|file|mimes:jpg,jpeg,png,webp|max:4096',
             'status_aktif'    => 'nullable|boolean',
         ]);
         $data['status_aktif'] = $request->boolean('status_aktif');

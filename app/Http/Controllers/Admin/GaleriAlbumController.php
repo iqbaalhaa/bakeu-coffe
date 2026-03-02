@@ -44,14 +44,19 @@ class GaleriAlbumController extends Controller
                 Log::warning('Galeri store pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Galeri store pre-validate', ['has_file' => false]);
+            Log::info('Galeri store pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'judul'          => 'required|string|max:255',
             'deskripsi'      => 'nullable|string',
             'urutan_tampil'  => 'nullable|integer|min:1',
             'status_aktif'   => 'nullable|boolean',
-            'cover'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'cover'          => 'nullable|file|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
         $data['status_aktif'] = $request->boolean('status_aktif');
@@ -135,14 +140,19 @@ class GaleriAlbumController extends Controller
                 Log::warning('Galeri update pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Galeri update pre-validate', ['has_file' => false]);
+            Log::info('Galeri update pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'judul'          => 'required|string|max:255',
             'deskripsi'      => 'nullable|string',
             'urutan_tampil'  => 'nullable|integer|min:1',
             'status_aktif'   => 'nullable|boolean',
-            'cover'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'cover'          => 'nullable|file|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
         $data['status_aktif'] = $request->boolean('status_aktif');

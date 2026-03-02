@@ -52,7 +52,12 @@ class ProdukController extends Controller
                 Log::warning('Produk store pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Produk store pre-validate', ['has_file' => false]);
+            Log::info('Produk store pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'nama_produk'        => 'required|string|max:255',
@@ -63,7 +68,7 @@ class ProdukController extends Controller
             'status_aktif'       => 'nullable|boolean',
             'ditandai_favorit'   => 'nullable|boolean',
             'urutan_tampil'      => 'nullable|integer|min:1',
-            'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'gambar'             => 'nullable|file|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
         // Normalisasi checkbox ke boolean
@@ -152,7 +157,12 @@ class ProdukController extends Controller
                 Log::warning('Produk update pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Produk update pre-validate', ['has_file' => false]);
+            Log::info('Produk update pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'nama_produk'        => 'required|string|max:255',
@@ -163,7 +173,7 @@ class ProdukController extends Controller
             'status_aktif'       => 'nullable|boolean',
             'ditandai_favorit'   => 'nullable|boolean',
             'urutan_tampil'      => 'nullable|integer|min:1',
-            'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'gambar'             => 'nullable|file|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
         $data['status_aktif']     = $request->boolean('status_aktif');

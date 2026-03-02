@@ -27,7 +27,12 @@ class TestimoniPublikController extends Controller
                 Log::warning('Testimoni publik pre-validate inspect failed', ['error' => $e->getMessage()]);
             }
         } else {
-            Log::info('Testimoni publik pre-validate', ['has_file' => false]);
+            Log::info('Testimoni publik pre-validate', [
+                'has_file' => false,
+                'content_length' => $request->headers->get('content-length'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+            ]);
         }
         $data = $request->validate([
             'nama_klien'      => 'required|string|max:255',

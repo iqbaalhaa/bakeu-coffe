@@ -51,8 +51,8 @@ class ProfilUsahaController extends Controller
             'teks_tombol_lihat_produk'    => 'nullable|string|max:100',
             'tautan_tombol_lihat_produk'  => 'nullable|string|max:255',
             'teks_tombol_whatsapp'        => 'nullable|string|max:100',
-            'logo'                         => 'nullable|image|mimes:jpg,jpeg,png,svg|max:4096',
-            'gambar_hero'                  => 'nullable|image|mimes:jpg,jpeg,png,svg|max:4096',
+            'logo'                         => 'nullable|file|mimes:jpg,jpeg,png,svg|max:4096',
+            'gambar_hero'                  => 'nullable|file|mimes:jpg,jpeg,png,svg|max:4096',
         ]);
 
         $profil = ProfilUsaha::first() ?? new ProfilUsaha();
