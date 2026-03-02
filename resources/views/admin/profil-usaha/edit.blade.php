@@ -153,7 +153,7 @@
                         <label class="form-label d-block">Logo Usaha</label>
                         @if($profil->path_logo)
                             <div class="mb-2">
-                                <img src="{{ asset('assets/profil_usaha/'.$profil->path_logo) }}" alt="Logo"
+                                <img src="{{ asset('assets/'.$profil->path_logo) }}" alt="Logo"
                                      style="max-height:60px;">
                             </div>
                         @endif
@@ -164,7 +164,7 @@
                         <label class="form-label d-block">Gambar Hero</label>
                         @if($profil->path_gambar_hero)
                             <div class="mb-2">
-                                <img src="{{ asset('assets/profil_usaha/'.$profil->path_gambar_hero) }}" alt="Gambar Hero"
+                                <img src="{{ asset('assets/'.$profil->path_gambar_hero) }}" alt="Gambar Hero"
                                      style="max-height:120px;">
                             </div>
                         @endif
@@ -277,7 +277,7 @@
                 <strong>Logo Usaha:</strong>
                 <div class="mt-2">
                     @if(!empty($profil->path_logo))
-                        <img src="{{ asset('assets/profil_usaha/'.$profil->path_logo) }}" alt="Logo" style="max-height:60px;">
+                        <img src="{{ asset('assets/'.$profil->path_logo) }}" alt="Logo" style="max-height:60px;">
                     @else
                         -
                     @endif
@@ -287,7 +287,7 @@
                 <strong>Gambar Hero:</strong>
                 <div class="mt-2">
                     @if(!empty($profil->path_gambar_hero))
-                        <img src="{{ asset('assets/profil_usaha/'.$profil->path_gambar_hero) }}" alt="Gambar Hero" style="max-height:120px;">
+                        <img src="{{ asset('assets/'.$profil->path_gambar_hero) }}" alt="Gambar Hero" style="max-height:120px;">
                     @else
                         -
                     @endif

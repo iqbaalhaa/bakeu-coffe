@@ -66,7 +66,11 @@ class ProfilUsahaController extends Controller
             }
             $file = $request->file('logo');
             $filename = $file->hashName();
-            $file->move(public_path('assets/profil_usaha/logo'), $filename);
+            $logoDir = public_path('assets/profil_usaha/logo');
+            if (!is_dir($logoDir)) {
+                mkdir($logoDir, 0755, true);
+            }
+            $file->move($logoDir, $filename);
             $data['path_logo'] = 'profil_usaha/logo/' . $filename;
         }
 
@@ -77,7 +81,11 @@ class ProfilUsahaController extends Controller
             }
             $file = $request->file('gambar_hero');
             $filename = $file->hashName();
-            $file->move(public_path('assets/profil_usaha/hero'), $filename);
+            $heroDir = public_path('assets/profil_usaha/hero');
+            if (!is_dir($heroDir)) {
+                mkdir($heroDir, 0755, true);
+            }
+            $file->move($heroDir, $filename);
             $data['path_gambar_hero'] = 'profil_usaha/hero/' . $filename;
         }
 
