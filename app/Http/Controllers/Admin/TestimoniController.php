@@ -42,12 +42,24 @@ class TestimoniController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('Testimoni store pre-validate', [
-            'has_file' => $request->hasFile('foto'),
-            'file_name' => $request->file('foto')?->getClientOriginalName(),
-            'file_size' => $request->file('foto')?->getSize(),
-            'file_mime' => $request->file('foto')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('foto');
+        if ($hasFile) {
+            $f = $request->file('foto');
+            try {
+                Log::info('Testimoni store pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Testimoni store pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Testimoni store pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'produk_id'       => 'nullable|exists:produk,id',
             'nama_klien'      => 'required|string|max:255',
@@ -135,12 +147,24 @@ class TestimoniController extends Controller
      */
     public function update(Request $request, Testimoni $testimoni)
     {
-        Log::info('Testimoni update pre-validate', [
-            'has_file' => $request->hasFile('foto'),
-            'file_name' => $request->file('foto')?->getClientOriginalName(),
-            'file_size' => $request->file('foto')?->getSize(),
-            'file_mime' => $request->file('foto')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('foto');
+        if ($hasFile) {
+            $f = $request->file('foto');
+            try {
+                Log::info('Testimoni update pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Testimoni update pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Testimoni update pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'produk_id'       => 'nullable|exists:produk,id',
             'nama_klien'      => 'required|string|max:255',

@@ -28,12 +28,24 @@ class GaleriAlbumController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('Galeri store pre-validate', [
-            'has_file' => $request->hasFile('cover'),
-            'file_name' => $request->file('cover')?->getClientOriginalName(),
-            'file_size' => $request->file('cover')?->getSize(),
-            'file_mime' => $request->file('cover')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('cover');
+        if ($hasFile) {
+            $f = $request->file('cover');
+            try {
+                Log::info('Galeri store pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Galeri store pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Galeri store pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'judul'          => 'required|string|max:255',
             'deskripsi'      => 'nullable|string',
@@ -107,12 +119,24 @@ class GaleriAlbumController extends Controller
 
     public function update(Request $request, GaleriAlbum $galeri)
     {
-        Log::info('Galeri update pre-validate', [
-            'has_file' => $request->hasFile('cover'),
-            'file_name' => $request->file('cover')?->getClientOriginalName(),
-            'file_size' => $request->file('cover')?->getSize(),
-            'file_mime' => $request->file('cover')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('cover');
+        if ($hasFile) {
+            $f = $request->file('cover');
+            try {
+                Log::info('Galeri update pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Galeri update pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Galeri update pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'judul'          => 'required|string|max:255',
             'deskripsi'      => 'nullable|string',

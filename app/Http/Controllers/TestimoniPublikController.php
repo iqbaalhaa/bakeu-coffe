@@ -11,12 +11,24 @@ class TestimoniPublikController extends Controller
 {
     public function store(Request $request, Produk $produk)
     {
-        Log::info('Testimoni publik pre-validate', [
-            'has_file' => $request->hasFile('path_foto'),
-            'file_name' => $request->file('path_foto')?->getClientOriginalName(),
-            'file_size' => $request->file('path_foto')?->getSize(),
-            'file_mime' => $request->file('path_foto')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('path_foto');
+        if ($hasFile) {
+            $f = $request->file('path_foto');
+            try {
+                Log::info('Testimoni publik pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Testimoni publik pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Testimoni publik pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'nama_klien'      => 'required|string|max:255',
             'profesi'         => 'nullable|string|max:255',

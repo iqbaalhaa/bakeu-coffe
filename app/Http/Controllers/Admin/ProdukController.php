@@ -36,12 +36,24 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('Produk store pre-validate', [
-            'has_file' => $request->hasFile('gambar'),
-            'file_name' => $request->file('gambar')?->getClientOriginalName(),
-            'file_size' => $request->file('gambar')?->getSize(),
-            'file_mime' => $request->file('gambar')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('gambar');
+        if ($hasFile) {
+            $f = $request->file('gambar');
+            try {
+                Log::info('Produk store pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Produk store pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Produk store pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'nama_produk'        => 'required|string|max:255',
             'kategori'           => 'nullable|string|max:100',
@@ -124,12 +136,24 @@ class ProdukController extends Controller
      */
     public function update(Request $request, Produk $produk)
     {
-        Log::info('Produk update pre-validate', [
-            'has_file' => $request->hasFile('gambar'),
-            'file_name' => $request->file('gambar')?->getClientOriginalName(),
-            'file_size' => $request->file('gambar')?->getSize(),
-            'file_mime' => $request->file('gambar')?->getMimeType(),
-        ]);
+        $hasFile = $request->hasFile('gambar');
+        if ($hasFile) {
+            $f = $request->file('gambar');
+            try {
+                Log::info('Produk update pre-validate', [
+                    'has_file' => true,
+                    'file_name' => $f->getClientOriginalName(),
+                    'file_size' => $f->getSize(),
+                    'client_mime' => $f->getClientMimeType(),
+                    'valid' => $f->isValid(),
+                    'tmp' => $f->getPathname(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Produk update pre-validate inspect failed', ['error' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('Produk update pre-validate', ['has_file' => false]);
+        }
         $data = $request->validate([
             'nama_produk'        => 'required|string|max:255',
             'kategori'           => 'nullable|string|max:100',
