@@ -55,21 +55,12 @@ class ProdukController extends Controller
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = $file->hashName();
-            $file->move(public_path('assets/produk'), $filename);
+            $dir = public_path('assets/produk');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['path_gambar'] = 'produk/' . $filename;
-        } else {
-            // Pasang gambar default bila tidak ada upload
-            $defaultSource = public_path('frontend/img/menu-1.jpg');
-            $targetPath = public_path('assets/produk/default.jpg');
-            
-            if (!file_exists(dirname($targetPath))) {
-                mkdir(dirname($targetPath), 0755, true);
-            }
-
-            if (is_file($defaultSource) && !file_exists($targetPath)) {
-                copy($defaultSource, $targetPath);
-            }
-            $data['path_gambar'] = 'produk/default.jpg';
         }
 
         Produk::create($data);
@@ -115,21 +106,12 @@ class ProdukController extends Controller
             
             $file = $request->file('gambar');
             $filename = $file->hashName();
-            $file->move(public_path('assets/produk'), $filename);
+            $dir = public_path('assets/produk');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['path_gambar'] = 'produk/' . $filename;
-        } else if (empty($produk->path_gambar)) {
-            // Pastikan ada default jika sebelumnya kosong
-            $defaultSource = public_path('frontend/img/menu-1.jpg');
-            $targetPath = public_path('assets/produk/default.jpg');
-            
-            if (!file_exists(dirname($targetPath))) {
-                mkdir(dirname($targetPath), 0755, true);
-            }
-
-            if (is_file($defaultSource) && !file_exists($targetPath)) {
-                copy($defaultSource, $targetPath);
-            }
-            $data['path_gambar'] = 'produk/default.jpg';
         }
 
         $produk->fill($data);

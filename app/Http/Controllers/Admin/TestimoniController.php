@@ -59,7 +59,11 @@ class TestimoniController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $filename = $file->hashName();
-            $file->move(public_path('assets/testimoni'), $filename);
+            $dir = public_path('assets/testimoni');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['path_foto'] = 'testimoni/' . $filename;
         }
 
@@ -111,7 +115,11 @@ class TestimoniController extends Controller
             
             $file = $request->file('foto');
             $filename = $file->hashName();
-            $file->move(public_path('assets/testimoni'), $filename);
+            $dir = public_path('assets/testimoni');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['path_foto'] = 'testimoni/' . $filename;
         }
         try {

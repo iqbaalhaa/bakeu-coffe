@@ -40,7 +40,11 @@ class GaleriAlbumController extends Controller
         if ($request->hasFile('cover')) {
             $file = $request->file('cover');
             $filename = $file->hashName();
-            $file->move(public_path('assets/galeri/cover'), $filename);
+            $dir = public_path('assets/galeri/cover');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
 
@@ -79,7 +83,11 @@ class GaleriAlbumController extends Controller
 
             $file = $request->file('cover');
             $filename = $file->hashName();
-            $file->move(public_path('assets/galeri/cover'), $filename);
+            $dir = public_path('assets/galeri/cover');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['cover_path'] = 'galeri/cover/' . $filename;
         }
 
@@ -167,4 +175,3 @@ class GaleriAlbumController extends Controller
             ->with('success', 'Item galeri berhasil dihapus.');
     }
 }
-

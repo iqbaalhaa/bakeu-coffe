@@ -26,7 +26,11 @@ class TestimoniPublikController extends Controller
         if ($request->hasFile('path_foto')) {
             $file = $request->file('path_foto');
             $filename = $file->hashName();
-            $file->move(public_path('assets/testimoni'), $filename);
+            $dir = public_path('assets/testimoni');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $file->move($dir, $filename);
             $data['path_foto'] = 'testimoni/' . $filename;
         } else {
             $data['path_foto'] = null;
@@ -37,4 +41,3 @@ class TestimoniPublikController extends Controller
         return back()->with('success_testimoni', 'Terima kasih, testimoni Anda sudah terkirim dan akan ditinjau admin.');
     }
 }
-
