@@ -158,7 +158,7 @@
                             </div>
                         @endif
                         <input type="file" name="logo" class="form-control">
-                        <small class="text-muted">Format: JPG, PNG, SVG. Maks 2 MB.</small>
+                        <small class="text-muted">Format: JPG, PNG, SVG. Maks 4 MB.</small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label d-block">Gambar Hero</label>
